@@ -5,7 +5,6 @@ import numpy as np
 
 
 # YOUR FUNCTIONS GO HERE -------------------------------------
-# 1. Populate the scoring matrix and the backtracking matrix
 
 def initScore(a,b):
     # Sequence 1 goes on top of matrix, 2 goes on the left
@@ -28,38 +27,36 @@ def initTrack(a,b):
         matrix[i][0] = "u"
     return matrix
 
-def populateScore(mat,seq1,seq2,i,j):
-    # i = column index, ie within a subarray
+def populate(smat,tmat,seq1,seq2,i,j):
+    # i = column index, ie which element within a subarray
     # j = row index, ie which subarray in main array
     # i relates to seq1, j relates to seq2
-    # returns d/u/l to use in populateTrack
-    upScore = mat[j-1][i] - 2
-    leftScore = mat[j][i-1] - 2
+    upScore = smat[j-1][i] - 2
+    leftScore = smat[j][i-1] - 2
     diagScore = 0
     if seq1[i-1] == "A" and seq2[j-1] == "A":
-        diagScore = mat[j-1][i-1] + 4
+        diagScore = smat[j-1][i-1] + 4
     elif seq1[i-1] == "C" and seq2[j-1] == "C":
-        diagScore = mat[j-1][i-1] + 3
+        diagScore = smat[j-1][i-1] + 3
     elif seq1[i-1] == "G" and seq2[j-1] == "G":
-        diagScore = mat[j-1][i-1] + 2
+        diagScore = smat[j-1][i-1] + 2
     elif seq1[i-1] == "T" and seq2[j-1] == "T":
-        diagScore = mat[j-1][i-1] + 1
+        diagScore = smat[j-1][i-1] + 1
     else:
-        diagScore = mat[j-1][i-1] - 3
+        diagScore = smat[j-1][i-1] - 3
     if diagScore == max(diagScore,upScore,leftScore):
-        mat[j][i] = diagScore
-        return "d"
+        smat[j][i] = diagScore
+        tmat[j][i] = "d"
     elif upScore == max(diagScore,upScore,leftScore):
-        mat[i][j] = upScore
-        return "u"
+        smat[j][i] = upScore
+        tmat[j][i] = "u"
     else:
-        mat[i][j] = leftScore
-        return "l"
+        smat[j][i] = leftScore
+        tmat[j][i] = "l"
 
-###########################################################may want to populate both within one function
-def populateTrack(mat,direct,i,j):
-    mat[j][i] = direct
+def backtrack(tmat,seq1,seq2):
     
+
 # ------------------------------------------------------------
 
 
@@ -120,14 +117,9 @@ trackMat=np.array(trackMat)
 for i in range(1,len1+1):
     for j in range(1,len2+1):
         print(i,j)
-        direct = populateScore(scoreMat,seq1,seq2,i,j)
-        populateTrack(trackMat,direct,i,j)
+        populate(scoreMat,trackMat,seq1,seq2,i,j)
         print(scoreMat)
         print(trackMat)
-        
-
-print(scoreMat)
-print(trackMat)
 
 #-------------------------------------------------------------
 
