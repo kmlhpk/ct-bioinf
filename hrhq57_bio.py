@@ -1,12 +1,65 @@
 #!/usr/bin/python
 import time
 import sys
+import numpy as np
 
 
 # YOUR FUNCTIONS GO HERE -------------------------------------
 # 1. Populate the scoring matrix and the backtracking matrix
 
+def initScore(a,b):
+    # Sequence 1 goes on top of matrix, 2 goes on the left
+    # a and b should be integers len(seq 1) and len(seq 2)
+    matrix = [[None for x in range(0,a+1)] for x in range(0,b+1)]
+    for i in range(0,a+1):
+        matrix[0][i] = -2*i
+    for i in range(0,b+1):
+        matrix[i][0] = -2*i
+    return matrix
+    
+def initTrack(a,b):
+    # Sequence 1 goes on top of matrix, 2 goes on the left
+    # a and b should be integers len(seq 1) and len(seq 2)
+    matrix = [[None for x in range(0,a+1)] for x in range(0,b+1)]
+    matrix[0][0] = "e"
+    for i in range(1,a+1):
+        matrix[0][i] = "l"
+    for i in range(1,b+1):
+        matrix[i][0] = "u"
+    return matrix
 
+def populateScore(mat,seq1,seq2,i,j):
+    # i = column index, ie within a subarray
+    # j = row index, ie which subarray in main array
+    # i relates to seq1, j relates to seq2
+    # returns d/u/l to use in populateTrack
+    upScore = mat[j-1][i] - 2
+    leftScore = mat[j][i-1] - 2
+    diagScore = 0
+    if seq1[i-1] == "A" and seq2[j-1] == "A":
+        diagScore = mat[j-1][i-1] + 4
+    elif seq1[i-1] == "C" and seq2[j-1] == "C":
+        diagScore = mat[j-1][i-1] + 3
+    elif seq1[i-1] == "G" and seq2[j-1] == "G":
+        diagScore = mat[j-1][i-1] + 2
+    elif seq1[i-1] == "T" and seq2[j-1] == "T":
+        diagScore = mat[j-1][i-1] + 1
+    else:
+        diagScore = mat[j-1][i-1] - 3
+    if diagScore == max(diagScore,upScore,leftScore):
+        mat[j][i] = diagScore
+        return "d"
+    elif upScore == max(diagScore,upScore,leftScore):
+        mat[i][j] = upScore
+        return "u"
+    else:
+        mat[i][j] = leftScore
+        return "l"
+
+###########################################################may want to populate both within one function
+def populateTrack(mat,direct,i,j):
+    mat[j][i] = direct
+    
 # ------------------------------------------------------------
 
 
@@ -33,6 +86,7 @@ def displayAlignment(alignment):
 
 # DO NOT EDIT ------------------------------------------------
 # This opens the files, loads the sequences and starts the timer
+'''
 file1 = open(sys.argv[1], 'r')
 seq1=file1.read()
 file1.close()
@@ -40,6 +94,7 @@ file2 = open(sys.argv[2], 'r')
 seq2=file2.read()
 file2.close()
 start = time.time()
+'''
 
 #-------------------------------------------------------------
 
@@ -50,13 +105,36 @@ start = time.time()
 # Use the backtracking matrix to find the optimal alignment 
 # To work with the printing functions below the best alignment should be called best_alignment and its score should be called best_score. 
 
+seq1 = "TGT"
+seq2 = "GAA"
 
+len1 = len(seq1)
+len2 = len(seq1)
+
+scoreMat = initScore(len1,len2)
+trackMat = initTrack(len1,len2)
+scoreMat=np.array(scoreMat)
+trackMat=np.array(trackMat)
+
+
+for i in range(1,len1+1):
+    for j in range(1,len2+1):
+        print(i,j)
+        direct = populateScore(scoreMat,seq1,seq2,i,j)
+        populateTrack(trackMat,direct,i,j)
+        print(scoreMat)
+        print(trackMat)
+        
+
+print(scoreMat)
+print(trackMat)
 
 #-------------------------------------------------------------
 
 
 # DO NOT EDIT (unless you want to turn off displaying alignments for large sequences)------------------
 # This calculates the time taken and will print out useful information 
+'''
 stop = time.time()
 time_taken=stop-start
 
@@ -64,6 +142,6 @@ time_taken=stop-start
 print('Time taken: '+str(time_taken))
 print('Best (score '+str(best_score)+'):')
 displayAlignment(best_alignment)
+'''
 
 #-------------------------------------------------------------
-
