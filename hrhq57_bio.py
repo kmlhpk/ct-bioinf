@@ -54,9 +54,30 @@ def populate(smat,tmat,seq1,seq2,i,j):
         smat[j][i] = leftScore
         tmat[j][i] = "l"
 
-def backtrack(tmat,seq1,seq2):
-    
-
+def backtrack(tmat,smat,a,b,seq1,seq2):
+    # a = lenseq1, b = lenseq2
+    pos = [b,a]
+    best_alignment = ["",""]
+    while pos != [0,0]:
+        if tmat[pos[1]][pos[0]] == "d":
+            best_alignment[0] += seq1[pos[0]]
+            seq1 = seq1[0:len(seq1)-1]
+            best_alignment[1] += seq2[pos[1]]
+            seq2 = seq2[0:len(seq2)-1]
+            pos[0] -= 1
+            pos[1] -= 1
+        elif tmat[pos[1]][pos[0]] == "u":
+            best_alignment[1] += seq2[pos[1]]
+            seq2 = seq2[0:len(seq2)-1]
+            best_alignment[0] += "-"
+            pos[0] -= 1
+        elif tmat[pos[1]][pos[0]] == "l":
+            best_alignment[0] += seq1[pos[0]]
+            seq1 = seq1[0:len(seq1)-1]
+            best_alignment[1] += "-"
+            pos[1] -= 1
+        return best_alignment
+            
 # ------------------------------------------------------------
 
 
@@ -120,6 +141,8 @@ for i in range(1,len1+1):
         populate(scoreMat,trackMat,seq1,seq2,i,j)
         print(scoreMat)
         print(trackMat)
+        
+backtrack(trackMat,scoreMat,len1,len2,seq1,seq2)
 
 #-------------------------------------------------------------
 
