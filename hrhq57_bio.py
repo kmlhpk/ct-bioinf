@@ -54,38 +54,41 @@ def populate(smat,tmat,seq1,seq2,i,j):
         smat[j][i] = leftScore
         tmat[j][i] = "l"
 
-def backtrack(tmat,a,b,seq1,seq2):
-    # a = lenseq1, b = lenseq2
-    pos = [b,a]
+def backtrack(tmat,seq1,seq2):
+    pos = [len(seq2),len(seq1)]
     best_alignment = ["",""]
     while pos != [0,0]:
-        print(pos)
+        
+        print()
+        print("Current position: ",pos)
+        print("Letter at position: ",tmat[pos[1]][pos[0]])
+        
         if tmat[pos[1]][pos[0]] == "d":
-            best_alignment[0] += seq1[pos[1]-1]
+            best_alignment[0] += seq1[len(seq1)-1]
             seq1 = seq1[0:len(seq1)-1]
-            best_alignment[1] += seq2[pos[1]-1]
+            best_alignment[1] += seq2[len(seq2)-1]
             seq2 = seq2[0:len(seq2)-1]
             pos[0] -= 1
             pos[1] -= 1
             print(best_alignment)
-            print("seq1: " + seq1)
-            print("seq2: " + seq2)
+            
         elif tmat[pos[1]][pos[0]] == "u":
-            best_alignment[1] += seq2[pos[1]-1]
+            best_alignment[1] += seq2[len(seq2)-1]
             seq2 = seq2[0:len(seq2)-1]
             best_alignment[0] += "-"
-            pos[0] -= 1
-            print(best_alignment)
-            print("seq1: " + seq1)
-            print("seq2: " + seq2)
-        elif tmat[pos[1]][pos[0]] == "l":
-            best_alignment[0] += seq1[pos[0]-1]
-            seq1 = seq1[0:len(seq1)-1]
-            best_alignment[1] += "-"
             pos[1] -= 1
             print(best_alignment)
-            print("seq1: " + seq1)
-            print("seq2: " + seq2)
+            
+        elif tmat[pos[1]][pos[0]] == "l":
+            best_alignment[0] += seq1[len(seq1)-1]
+            seq1 = seq1[0:len(seq1)-1]
+            best_alignment[1] += "-"
+            pos[0] -= 1
+            print(best_alignment)
+            
+    best_alignment[0] =  best_alignment[0][::-1]
+    best_alignment[1] =  best_alignment[1][::-1]
+    print(best_alignment)
     return best_alignment
             
 # ------------------------------------------------------------
@@ -147,13 +150,12 @@ trackMat=np.array(trackMat)
 
 for i in range(1,len1+1):
     for j in range(1,len2+1):
-        print(i,j)
         populate(scoreMat,trackMat,seq1,seq2,i,j)
-        print(scoreMat)
-        print(trackMat)
-print("done")
+print(trackMat)
         
-backtrack(trackMat,len1,len2,seq1,seq2)
+align = backtrack(trackMat,seq1,seq2)
+print()
+displayAlignment(align)
 
 #-------------------------------------------------------------
 
