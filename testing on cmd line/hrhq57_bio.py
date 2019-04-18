@@ -94,6 +94,7 @@ def backtrack(tmat,seq1,seq2):
         
         
         
+        
     best_alignment[0] =  best_alignment[0][::-1]
     best_alignment[1] =  best_alignment[1][::-1]
     return best_alignment
