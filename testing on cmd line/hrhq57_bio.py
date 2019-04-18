@@ -1,7 +1,9 @@
 #!/usr/bin/python
+
+# Please run this file on Python 2.7.16
+
 import time
 import sys
-#import numpy as np
 
 
 # YOUR FUNCTIONS GO HERE -------------------------------------
@@ -71,39 +73,26 @@ def backtrack(tmat,seq1,seq2):
     while row != 0 and col != 0:
         
         '''
-        if tmat[row][col] == 3:
-            best_alignment[0] += seq1[len(seq1)-1]
-            seq1 = seq1[0:len(seq1)-1]
-            best_alignment[1] += seq2[len(seq2)-1]
-            seq2 = seq2[0:len(seq2)-1]
-            row -= 1
-            col -= 1
-        elif tmat[row][col] == 2:
-            best_alignment[1] += seq2[len(seq2)-1]
-            seq2 = seq2[0:len(seq2)-1]
-            best_alignment[0] += "-"
-            row -= 1
-        elif tmat[row][col] == 1:
-            best_alignment[0] += seq1[len(seq1)-1]
-            seq1 = seq1[0:len(seq1)-1]
-            best_alignment[1] += "-"
-            col -= 1
-        '''
-        
         if tmat[row][col] == 2 or tmat[row][col] == 3:
             best_alignment[1] += seq2[len(seq2)-1]
             seq2 = seq2[0:len(seq2)-1]
         if tmat[row][col] == 1 or tmat[row][col] == 3:
             best_alignment[0] += seq1[len(seq1)-1]
             seq1 = seq1[0:len(seq1)-1]
+            
         if tmat[row][col] == 2:
             best_alignment[0] += "-"
         elif tmat[row][col] == 1:
             best_alignment[1] += "-"
+            
         if tmat[row][col] == 2 or tmat[row][col] == 3:
             row -=1
         if tmat[row][col] == 1 or tmat[row][col] == 3:
             col -=1
+        '''        
+        
+        
+        
         
     best_alignment[0] =  best_alignment[0][::-1]
     best_alignment[1] =  best_alignment[1][::-1]
