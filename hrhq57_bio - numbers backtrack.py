@@ -24,11 +24,11 @@ def initTrack(a,b):
     # Sequence 1 goes on top of matrix, 2 goes on the left
     # a and b should be integers len(seq 1) and len(seq 2)
     matrix = [[None for x in range(0,a+1)] for x in range(0,b+1)]
-    matrix[0][0] = "e"
+    matrix[0][0] = 0
     for i in range(1,a+1):
-        matrix[0][i] = "l"
+        matrix[0][i] = 1
     for i in range(1,b+1):
-        matrix[i][0] = "u"
+        matrix[i][0] = 2
     return matrix
 
 def populate(smat,tmat,seq1,seq2,i,j):
@@ -50,13 +50,13 @@ def populate(smat,tmat,seq1,seq2,i,j):
         diagScore = smat[j-1][i-1] - 3
     if diagScore == max(diagScore,upScore,leftScore):
         smat[j][i] = diagScore
-        tmat[j][i] = "d"
+        tmat[j][i] = 3
     elif upScore == max(diagScore,upScore,leftScore):
         smat[j][i] = upScore
-        tmat[j][i] = "u"
+        tmat[j][i] = 2
     else:
         smat[j][i] = leftScore
-        tmat[j][i] = "l"
+        tmat[j][i] = 1
 
 def backtrack(tmat,seq1,seq2):
     pos = [len(seq2),len(seq1)]
@@ -67,7 +67,7 @@ def backtrack(tmat,seq1,seq2):
         #print("Current position: ",pos)
         #print("Letter at position: ",tmat[pos[0]][pos[1]])
         
-        if tmat[pos[0]][pos[1]] == "d":
+        if tmat[pos[0]][pos[1]] == 3:
             best_alignment[0] += seq1[len(seq1)-1]
             seq1 = seq1[0:len(seq1)-1]
             best_alignment[1] += seq2[len(seq2)-1]
@@ -76,14 +76,14 @@ def backtrack(tmat,seq1,seq2):
             pos[1] -= 1
             #print(best_alignment)
             
-        elif tmat[pos[0]][pos[1]] == "u":
+        elif tmat[pos[0]][pos[1]] == 2:
             best_alignment[1] += seq2[len(seq2)-1]
             seq2 = seq2[0:len(seq2)-1]
             best_alignment[0] += "-"
             pos[0] -= 1
             #print(best_alignment)
             
-        elif tmat[pos[0]][pos[1]] == "l":
+        elif tmat[pos[0]][pos[1]] == 1:
             best_alignment[0] += seq1[len(seq1)-1]
             seq1 = seq1[0:len(seq1)-1]
             best_alignment[1] += "-"
@@ -121,14 +121,12 @@ def displayAlignment(alignment):
 
 # DO NOT EDIT ------------------------------------------------
 # This opens the files, loads the sequences and starts the timer
-'''
 file1 = open(sys.argv[1], 'r')
 seq1=file1.read()
 file1.close()
 file2 = open(sys.argv[2], 'r')
 seq2=file2.read()
 file2.close()
-'''
 start = time.time()
 
 
@@ -141,8 +139,10 @@ start = time.time()
 # Use the backtracking matrix to find the optimal alignment 
 # To work with the printing functions below the best alignment should be called best_alignment and its score should be called best_score. 
 
+'''
 seq1 = "GAATTCAATACTCCACTTTCCATTCTGTTCAAAGGTCACGTATAGTCCTGGGAATACTCAGGGTTCTCACTTCATGGCTATGCAGGTATTTGTTCCCACACTACTTAAATACATTAAATATCATTTACAGTAACATAAAAATCAAATGCTTAAGAATAAATCTAATGAAAGAGGTGCCAGAGGTCTGTATCAATATGAACAAGGCATTAAAATTAAAGGCGCCTAAATAAATGAAGAGAGATGCTATGTTCATTGCTCGAAAGGACTCAACACAGTTAAGGATGTCAGCTCTCCTCAGAGTGATCTAGAGATTCAATGTCATCCCAATAAAATACAGCAGGACATTTGTGAGAACTAGAAAGCTAGTTTAAATTACATAAAGTGGAAAAGACCTAGAATAGTCAAGACAAACTCGGAAAGAAATGAATAAAGTTGGAACACTTATAATACCAGATAGCAAGATTTACTATAAGTTCCCATTATTGGCCAGGTGTGGACGCTCATGCCTGTAATGCCAGCAGTTTAGGAAGCTGAGGTGGGTGGATCACTTGAGCCCAAGAGTTCAAGTCCAGCCTGAGCAACATGGCAAAACCACATCTCGACAACAACACATTGGCTGTGTGCTGGCAGGTATCTGTAATCTCAGCTACCCGTGAGGCTGGGGTGGGAGGACTGTCGGACCCCAGGAGGTTGCGGCTGCAGATCTTGCCCTTGCACTCCAGTCTGGGGGACAGTGAGACCCTGTCTCAAAAAAATGTTCCCATTTGTGAACCCCTCAAATTTGAGACAGGTCTCAGTTAATTTAGAAAGCTTATTTTGCCCAGGTTGAGAATGCACGTCCAACACAACCTCAGGGGGTCCTGACATGTGCCCAACCTCATGAGGTCTGACCAAGGCAGCCAGAGCACAGTCTGGTTTTATACATTTTAGGGAGATACGAGACATCAACATATGTCAGATGAACACTGGTTTTGTCTGGAAAGGCGGTAGAACTCGAAGC"
 seq2 = "GAATTCAATACTCCTCTTTCCATTATGTTCTAAGGTCACTCTAGTCCTGGGATACCGGTTCTCACTTCTACTATGCAGGTTTTTGTTCCAACACACTTAAACAAAAATATCATTTATGTAACATAAAAATCAATGCGTAAGATAAATTAATGCAAGCTGTCGAGGTTGTTTCAAAGACAAGGCCTTAAAATTAAAGCGCCTATAAAAGAGTGCTATGTCATTCCTCGACAGGACTAACATAGTTAAGGAGTAACTCTCCTCAGAGTGACTAGAGATCCATGTCATCCCAAAAAATACAGCAGCACTCTATAACTAGTAAGTTAGGTTAATTACTAAACTGAAAAACCGAGAATAGTAACAACTCGCAAAAAAGATAAGTTGGAACACTATAATACCAGATAGCAAGATTTAAAATAGTTCCCATGTTGGCAGGTGTGGACGCCTGCCTGTAAGTTAGCAGTTAGGAAGCTGTGTTGTGATCACTTGAGCCCAAGTGTTCAAGGCCACCTTAGCACATGGCAAAACACTTCTCGACAACAACACATTCTGTGCGGCGTATAGTAATCTCATCGACCGTGAGGCGGGGTGGGAGGAGTGTCGGACACCAGGAGGTTGCGGCTCAGTTTTGCCCTTGCACCCAGTCTGTGGGAAGTGGACCTGTCCAAAAAAATGTTCCCATTTTGAACCCCTCAAATTTGACAGGTCTCGTTAATGTGAATGCTATTGCAGTTGAGAATCCACGTCCACACAATTCGGGGTCCTGCCATGGACAACCTCATGGGGTCTGACAAGGCAGAGAGCACAGACTCGTTTTATACCTTGGGGATCGAGACTCACAATGTCAGATGAAGACTGGTTTTGTCTGGAAAGGAGGTAGACTCCAGTGAGGGGCTTCCAGTCACAGGTAGATACAGACAAATGGCTGCATCTTTAAGTTCTGATTAGACCCTAGAGGAGGAATGGAATGTATTTATCTCATGACAGAGGGTGACTCGAAAGA"
+'''
 
 len1 = len(seq1)
 len2 = len(seq2)
