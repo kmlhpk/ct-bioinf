@@ -30,13 +30,13 @@ print(minR," ",minC,":",mat[minR][minC])
 # delete last row and col (should be empty)
 
 # MERGE LABELS
-winner = min(minR,minC)
-loser = max(minR,minC)
-mat[0][winner] += mat[0][loser]
-mat[winner][0] += mat[loser][0]
+keep = min(minR,minC)
+merge = max(minR,minC)
+mat[0][keep] += mat[0][merge]
+mat[keep][0] += mat[merge][0]
 
 print(mat[0])
-print(mat[winner])
+print(mat[keep])
 
 
 # NEW ROW
