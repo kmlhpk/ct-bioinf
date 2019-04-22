@@ -72,7 +72,6 @@ def backtrack(tmat,seq1,seq2):
     best_alignment = ["",""]
     while row != 0 and col != 0:
         
-# possible speedup would use continues
         if tmat[row][col] == 2 or tmat[row][col] == 3:
             best_alignment[1] += seq2[len(seq2)-1]
             seq2 = seq2[0:len(seq2)-1]
