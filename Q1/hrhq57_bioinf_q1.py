@@ -56,20 +56,8 @@ def populate(smat,tmat,seq1,seq2):
                 diagScore += 2
             else:
                 diagScore += 1
-            
-            '''
+                
             # Picks maximum score, and populates matrices accordingly
-            maxi = max(diagScore,upScore,leftScore)
-            if diagScore == maxi:
-                smat[j][i] = diagScore
-                tmat[j][i] = 3
-            elif upScore == maxi:
-                smat[j][i] = upScore
-                tmat[j][i] = 2
-            else:
-                smat[j][i] = leftScore
-                tmat[j][i] = 1
-            '''
             if diagScore >= upScore >= leftScore or diagScore >= leftScore >= upScore:
                 smat[j][i] = diagScore
                 tmat[j][i] = 3
@@ -78,10 +66,8 @@ def populate(smat,tmat,seq1,seq2):
                 tmat[j][i] = 2
             else:
                 smat[j][i] = leftScore
-                tmat[j][i] = 1            
+                tmat[j][i] = 1
             
-
-
 def backtrack(tmat,seq1,seq2):
     # Generates optimal alignment
     # Starts at bottom-right of backtracking matrix, works its way up and left according to directions
@@ -90,30 +76,32 @@ def backtrack(tmat,seq1,seq2):
     best_alignment = ["",""]
     # Stops when it gets to top-left cell
     while row != 0 and col != 0:
-        # Executes one of the following if direction = up or left, both if diag
-        # If direction = up or diag
-        if tmat[row][col] == 2 or tmat[row][col] == 3:
-            # Takes last letter of seq2, puts it in alignment, deletes it from seq2
-            best_alignment[1] += seq2[len(seq2)-1]
-            seq2 = seq2[0:len(seq2)-1]
-        # If direction = left or diag
-        if tmat[row][col] == 1 or tmat[row][col] == 3:
-            # Takes last letter of seq1, puts it in alignment, deletes it from seq1
+        # If direction is diagonal...
+        if tmat[row][col] == 3:
+            # Takes corresponding letters of seq1 and seq2, adds to alignment, deletes from end of seqs
             best_alignment[0] += seq1[len(seq1)-1]
             seq1 = seq1[0:len(seq1)-1]
-        
-        # If direction != diag, need to fill other side of alignment with gap
-        if tmat[row][col] == 2:
+            best_alignment[1] += seq2[len(seq2)-1]
+            seq2 = seq2[0:len(seq2)-1]
+            row -= 1
+            col -= 1
+        # If direction is up...
+        elif tmat[row][col] == 2:
+            # Takes corresponding letter of seq2, adds to alignment, deletes from end of seq2
+            best_alignment[1] += seq2[len(seq2)-1]
+            seq2 = seq2[0:len(seq2)-1]
+            # Adds gap to other side of alignment
             best_alignment[0] += "-"
+            row -= 1
+        # If direction is left...
         elif tmat[row][col] == 1:
+            # Takes corresponding letter of seq2, adds to alignment, deletes from end of seq2
+            best_alignment[0] += seq1[len(seq1)-1]
+            seq1 = seq1[0:len(seq1)-1]
+            # Adds gap to other side of alignment
             best_alignment[1] += "-"
-        
-        # Executes one of the following if direction = up or left, both if diag
-        if tmat[row][col] == 2 or tmat[row][col] == 3:
-            row -=1
-        if tmat[row][col] == 1 or tmat[row][col] == 3:
-            col -=1
-        
+            col -= 1
+
     # Flips the alignment strings, as they're appended to in the "wrong" order
     best_alignment[0] = best_alignment[0][::-1]
     best_alignment[1] = best_alignment[1][::-1]
