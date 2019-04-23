@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # This program was successfully tested using both Python 2.7.16 64-bit and 3.7.3 64-bit...
 # ...however it runs a lot faster in 2.7 than 3.7!
 
@@ -6,7 +5,6 @@ import time
 import sys
 
 # YOUR FUNCTIONS GO HERE -------------------------------------
-# 1. Populate the scoring matrix and the backtracking matrix
 
 def initialise(a,b):
     # a should be len(seq1), b should be len(seq2)
@@ -55,9 +53,8 @@ def populate(smat,tmat,seq1,seq2):
             elif seq1[i-1] == "G" and seq2[j-1] == "G":
                 diagScore += 2
             else:
-                diagScore += 1
+                diagScore += 1            
             
-            '''
             # Picks maximum score, and populates matrices accordingly
             maxi = max(diagScore,upScore,leftScore)
             if diagScore == maxi:
@@ -69,17 +66,6 @@ def populate(smat,tmat,seq1,seq2):
             else:
                 smat[j][i] = leftScore
                 tmat[j][i] = 1
-            '''
-            if diagScore >= upScore >= leftScore or diagScore >= leftScore >= upScore:
-                smat[j][i] = diagScore
-                tmat[j][i] = 3
-            elif upScore >= leftScore >= diagScore or upScore >= diagScore >= leftScore:
-                smat[j][i] = upScore
-                tmat[j][i] = 2
-            else:
-                smat[j][i] = leftScore
-                tmat[j][i] = 1            
-            
 
 
 def backtrack(tmat,seq1,seq2):
@@ -90,15 +76,16 @@ def backtrack(tmat,seq1,seq2):
     best_alignment = ["",""]
     # Stops when it gets to top-left cell
     while row != 0 and col != 0:
+        
         # Executes one of the following if direction = up or left, both if diag
         # If direction = up or diag
         if tmat[row][col] == 2 or tmat[row][col] == 3:
-            # Takes last letter of seq2, puts it in alignment, deletes it from seq2
+            # Takes letter of seq2, puts it in alignment, deletes it from seq2
             best_alignment[1] += seq2[len(seq2)-1]
             seq2 = seq2[0:len(seq2)-1]
         # If direction = left or diag
         if tmat[row][col] == 1 or tmat[row][col] == 3:
-            # Takes last letter of seq1, puts it in alignment, deletes it from seq1
+            # Takes letter of seq1, puts it in alignment, deletes it from seq1
             best_alignment[0] += seq1[len(seq1)-1]
             seq1 = seq1[0:len(seq1)-1]
         
@@ -115,13 +102,11 @@ def backtrack(tmat,seq1,seq2):
             col -=1
         
     # Flips the alignment strings, as they're appended to in the "wrong" order
-    best_alignment[0] = best_alignment[0][::-1]
-    best_alignment[1] = best_alignment[1][::-1]
+    best_alignment[0] =  best_alignment[0][::-1]
+    best_alignment[1] =  best_alignment[1][::-1]
     return best_alignment
-
+            
 # ------------------------------------------------------------
-
-
 
 # DO NOT EDIT ------------------------------------------------
 # Given an alignment, which is two strings, display it
@@ -142,7 +127,6 @@ def displayAlignment(alignment):
 
 # ------------------------------------------------------------
 
-
 # DO NOT EDIT ------------------------------------------------
 # This opens the files, loads the sequences and starts the timer
 file1 = open(sys.argv[1], 'r')
@@ -154,7 +138,6 @@ file2.close()
 start = time.time()
 
 #-------------------------------------------------------------
-
 
 # YOUR CODE GOES HERE ----------------------------------------
 # The sequences are contained in the variables seq1 and seq2 from the code above.
@@ -176,12 +159,12 @@ best_score = scoreMat[len(scoreMat)-1][len(scoreMat[len(scoreMat)-1])-1]
 # Gets best alignment
 best_alignment = backtrack(trackMat,seq1,seq2)
 
-
 #-------------------------------------------------------------
 
 
 # DO NOT EDIT (unless you want to turn off displaying alignments for large sequences)------------------
 # This calculates the time taken and will print out useful information 
+
 stop = time.time()
 time_taken=stop-start
 
@@ -191,4 +174,3 @@ print('Best (score '+str(best_score)+'):')
 displayAlignment(best_alignment)
 
 #-------------------------------------------------------------
-

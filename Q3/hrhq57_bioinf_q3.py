@@ -5,6 +5,7 @@ import time
 import networkx as nx
 import matplotlib.pyplot as plt
 
+# Function expects input in the format of a string, with the last 4 characters being ".txt"
 def WPGMA(txt):
     # Starts timer
     start = time.time()
@@ -45,9 +46,9 @@ def WPGMA(txt):
                     minR = row
                     minC = col
 
-        # Adds new col to distances matrix
+        # Adds new col to distances matrix (new merged species will be placed here)
         dist = np.insert(dist,len(dist),0,axis=1)
-        # Adds new row to distances matrix (while not directly useful, it maintains symmetry)
+        # Adds new row to distances matrix (while not useful in calculations, it maintains symmetry)
         dist = np.append(dist,[[0 for x in range(0, len(dist)+1)]],axis=0)
         
         # Calculates new species' species distances
@@ -67,7 +68,7 @@ def WPGMA(txt):
             else:
                 dist[row][end-1] = 0.5*(dist[minR][row] + dist[minC][row])
         
-        # Deletes columns and rows corersponding to pre-merge species
+        # Deletes columns and rows corersponding to pre-merge species distances
         dist = np.delete(dist,(minR,minC),axis=0)
         dist = np.delete(dist,(minR,minC),axis=1)
         
@@ -109,7 +110,7 @@ def WPGMA(txt):
             G.add_edge(spec[minR],newLab)
             G.add_edge(spec[minC],newLab)
         
-        # Gets rid of pre-merge species
+        # Gets rid of pre-merge species labels
         old1 = spec[minR]
         old2 = spec[minC]
         spec.remove(old1)
@@ -135,12 +136,12 @@ def WPGMA(txt):
     
     # Saves graph to file
     graphName = "phylo_tree_"
-    graphName = graphName + txt[::-1][4:][::-1] # this line gets rid of ".txt" from end of input
+    graphName = graphName + txt[::-1][4:][::-1] # Gets rid of ".txt" from end of input
     graphName = graphName + ".png"
     plt.savefig(graphName)
     plt.clf()
     
-    # Displays time taken to form matrix and graph
+    # Displays time taken to form matrices and graph
     stop = time.time()
     timeTaken = stop - start
     print("Time taken: ",timeTaken,"s")
