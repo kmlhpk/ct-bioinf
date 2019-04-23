@@ -1,15 +1,11 @@
-#!/usr/bin/python
-
-# Please run this file on Python 2.7.16
+# This program written and tested using Python 2.7.16 64-bit; Python 2, in general, runs a lot faster!
 
 import time
 import sys
 
-
 # YOUR FUNCTIONS GO HERE -------------------------------------
 
 def initialise(a,b):
-    
     matrix_score = [[None for x in range(0,a+1)] for x in range(0,b+1)]
     for i in range(0,a+1):
         matrix_score[0][i] = -2*i
@@ -117,7 +113,6 @@ def displayAlignment(alignment):
 
 # DO NOT EDIT ------------------------------------------------
 # This opens the files, loads the sequences and starts the timer
-print("starting...")
 file1 = open(sys.argv[1], 'r')
 seq1=file1.read()
 file1.close()
