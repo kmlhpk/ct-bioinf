@@ -1,4 +1,5 @@
-# This program written and tested using Python 3.7.3 64-bit
+# This program written and tested using Python 3.7.3 64-bit - it may run faster on Python 2, but...
+# ...I haven't checked whether it works on v2, and it's pretty speedy on v3 anyway.
 
 import numpy as np
 import time
@@ -134,7 +135,7 @@ def WPGMA(txt):
     pos = nx.get_node_attributes(G,'pos')
     nx.draw_networkx(G,pos)
     
-    # Saves graph to file
+    # Saves graph to file with unique name based on input
     graphName = "phylo_tree_"
     graphName = graphName + txt[::-1][4:][::-1] # Gets rid of ".txt" from end of input
     graphName = graphName + ".png"
