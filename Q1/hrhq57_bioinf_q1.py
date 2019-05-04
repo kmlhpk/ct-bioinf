@@ -31,7 +31,6 @@ def initialise(a,b):
     matrices=[matrix_score,matrix_track]
     return matrices
 
-
 def populate(smat,tmat,seq1,seq2):
     # seq1 along "top" of matrix, seq2 along "left"
     # i = column index, ie. which element within a subarray
@@ -75,7 +74,7 @@ def backtrack(tmat,seq1,seq2):
     col = len(seq1)
     best_alignment = ["",""]
     # Stops when it gets to top-left cell
-    while row != 0 and col != 0:
+    while tmat[row][col] != 0:
         # If direction is diagonal...
         if tmat[row][col] == 3:
             # Takes corresponding letters of seq1 and seq2, adds to alignment, deletes from end of seqs
