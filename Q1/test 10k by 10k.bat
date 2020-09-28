@@ -1,2 +1,0 @@
-python2 hrhq57_bioinf_q1.py length10000_A.txt length10000_B.txt
-pause
